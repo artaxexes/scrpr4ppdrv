@@ -1,0 +1,25 @@
+<div ng-app="ppdrvDls" ng-controller="ppdrvDlsCtrl">
+                        <ul>
+                                <li ng-repeat="x in myData">
+                                        {{ x.id + ' - ' + x.org_id.name }}
+                                        <br>
+                                        {{ x.next_activity_subject + ': ' + x.next_activity_note }}
+                                        <br>
+                                        {{ 'Updated: ' + x.update_time }}
+                                        <br>
+                                        <br>
+                                </li>
+                        </ul>
+                </div>
+                <script>
+                        var token = "bf5d11d1c25fc72a8704579190ab64d3661fe6d9";
+                        var app = angular.module('ppdrvDls', []);
+                        var theUrl =
+                        app.controller('ppdrvDlsCtrl', function($scope, $http){
+                                $http({
+                                        method : "GET",
+                                        url : .get("https://api.pipedrive.com/v1/deals?api_token=").then(function(response){
+                                        $scope.myData = response.data.data;
+                                });
+                        });
+                </script>
