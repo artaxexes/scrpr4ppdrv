@@ -12,7 +12,7 @@
                         </ul>
                 </div>
                 <script>
-                        var token = "bf5d11d1c25fc72a8704579190ab64d3661fe6d9";
+                        var token = "";
                         var app = angular.module('ppdrvDls', []);
                         var theUrl =
                         app.controller('ppdrvDlsCtrl', function($scope, $http){
