@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>scrpr4ppdrv</title>
+		<meta charset="utf-8">
+		<!-- Bootstrap -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<!-- AngularJS -->
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<h2>scrpr4ppdrv</h2>
+			<h4>Get data from your Pipedrive account</h4>
+			<div class="form-group">
+				<label for="pipedriveToken">Pipedrive API Token:</label>
+				<input type="text" class="form-control" id="pipedriveToken" placeholder="Type here your personal API token from pipedrive.com" value="" maxlength="40" size="40" autocomplete="on" autofocus>
+			</div>
+			<div class="form-group">
+				<p>Type the required info below to see some data from your Pipedrive account:</p>
+				<label for="pipedriveField">Field:</label>
+				<select class="form-control" id="pipedriveField">
+					<option selected disabled>Choose here</option> 
+					<option value="activities">Activities</option>
+					<option value="deals">Deals</option>
+					<option value="organizations">Organizations</option>
+					<option value="persons">Persons</option>
+				</select>
+			</div>
+		</div>
+	</body>
+</html>
