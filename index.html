@@ -1,35 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 	<head>
 		<title>scrpr4ppdrv</title>
 		<meta charset="utf-8">
-		<!-- Bootstrap -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- bootstrap -->
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-		<!-- AngularJS -->
-		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+		<!-- angularjs -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+		<!-- internal style -->
+		<style>
+			div {
+				text-align: center
+			}
+			ul {
+				text-align: left
+			}
+		</style>
 	</head>
 	<body>
 		<div class="container">
-			<h2>scrpr4ppdrv</h2>
-			<h4>Get data from your Pipedrive account</h4>
-			<div class="form-group">
-				<label for="pipedriveToken">Pipedrive API Token:</label>
-				<input type="text" class="form-control" id="pipedriveToken" placeholder="Type here your personal API token from pipedrive.com" value="" maxlength="40" size="40" autocomplete="on" autofocus>
+			<div class="jumbotron">
+                                <h1>scrpr4ppdrv</h1>
+                                <p>Get data from your <a href="http://www.pipedrive.com" target="_blank">Pipedrive</a> account</p>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-12">
+					<div class="form-group">
+						<label for="pipedriveToken">Pipedrive API Token:</label>
+						<input type="text" class="form-control" id="pipedriveToken" placeholder="Type here your personal API token from pipedrive.com" maxlength="40" size="40" autocomplete="on" autofocus>
+					</div>
+					<div class="form-group">
+						<label for="pipedriveField">Select field:</label>
+						<select class="form-control" id="pipedriveField">
+							<option disabled>Choose here</option>
+							<option value="activities">Activities</option>
+							<option selected value="deals">Deals</option>
+							<option value="organizations">Organizations</option>
+							<option value="persons">Persons</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-default">Submit</button>
+					</div>
+                                </div>
+                        </div>
+			<div class="row">
+				<div class="col-md-12">
+					<div hidden class="alert alert-info" id="info">
+					</div>
+					<div hidden class="alert alert-warning" id="warning">
+					</div>
+				</div>
 			</div>
-			<div class="form-group">
-				<p>Type the required info below to see some data from your Pipedrive account:</p>
-				<label for="pipedriveField">Field:</label>
-				<select class="form-control" id="pipedriveField">
-					<option selected disabled>Choose here</option> 
-					<option value="activities">Activities</option>
-					<option value="deals">Deals</option>
-					<option value="organizations">Organizations</option>
-					<option value="persons">Persons</option>
-				</select>
+			<div class="row">
+				<div class="col-md-12">
+					<div ng-app="pipedriveResults" ng-controller="resultsCtrl">
+						<ul>
+							<li ng-repeat="x in content">
+								{{ x.id + ' - ' + x.org_id.name }}
+								<br>
+								{{ x.next_activity_subject + ': ' + x.next_activity_note }}
+								{{ 'Updated: ' + x.update_time }}
+								<br>
+								<br>
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
+                <script>
+                        var token = prompt("Type here your personal API token from pipedrive.com: ");
+			document.getElementById('pipedriveToken').value = token;
+			var fieldIndex = document.getElementById('pipedriveField').selectedIndex;
+			var fieldOptions = document.getElementById('pipedriveField').options;
+                        var api_url = "https://api.pipedrive.com/v1/" + fieldOptions[fieldIndex].value + "?api_token=" + token;
+                        var app = angular.module('pipedriveResults', []);
+                        app.controller('resultsCtrl', function($scope, $http){
+                                $http.get(api_url)
+				.then(function success(response){
+					document.getElementById('info').innerHTML = "<strong>URL: </strong>" + api_url;
+					$("#info").show(700);
+                                        $scope.content = response.data.data;
+				}, function error(response){
+					document.getElementById('warning').innerHTML = "<strong>Warning!</strong> The Pipedrive returns a failure!";
+					$("#warning").show(700);
+				});
+                        });
+                </script>
 	</body>
 </html>
