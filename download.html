@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<title>scrpr4ppdrv</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+                <!-- bootstrap -->
+                <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+                <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+                <!-- angularjs -->
+                <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+                <!-- internal style -->
+                <style>
+                        div {
+                                text-align: center
+                        }
+                </style>
+	</head>
+	<body>
+		<div class="container">
+                        <div class="jumbotron">
+                                <h1>scrpr4ppdrv</h1>
+                                <p>Faça download de dados da sua conta <a href="http://www.pipedrive.com" target="_blank">Pipedrive</a> em formato <a href="https://tools.ietf.org/html/rfc4180" target="_blank">CSV</a></p>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-12">
+                                        <div class="panel-footer">
+						Problemas? <a href="mailto:anddrei.ferreira@biggdata.com.br?Subject=scrpr4ppdrv%20download.html" target="_top">anddrei.ferreira@biggdata.com.br</a>
+                                        </div>
+				</div>
+                        </div>
+		</div>
+		<script>
+			var token = prompt("API token");
+			var url = "https://api.pipedrive.com/v1/deals?api_token=" + token;
+			$(document).ready(function(){
+				$.getJSON(url, function(result){
+					var limit = result.data.length;
+					var csvFile = "data:text/csv;charset=utf-8,";
+					for(var i = 0; i < limit; i++){
+						var reg = result.data[i];
+						var csvReg = reg.update_time + ", " + reg.org_name + ", " + reg.next_activity_note;
+						csvFile += i == (limit - 1) ? csvReg : csvReg + "\n";
+					}
+					var encodedURI = encodeURI(csvFile);
+					var link = document.createElement("a");
+					link.setAttribute("href", encodedURI);
+					link.setAttribute("download", "pipedrive.csv");
+					document.body.appendChild(link);
+					link.click();
+					document.body.removeChild(link);
+				});
+			});
+			
+			/*
+			var app = angular.module("pipedriveResults", []);
+			app.controler("resultsCtrl", function($scope, $http){
+				$http.get(url)
+				.then(function success(response){
+					
+				}, function error(response){
+					
+				});
+			});
+			*/
+		</script>
+	</body>
+</html>
