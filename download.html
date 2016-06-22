@@ -36,12 +36,18 @@
 			var url = "https://api.pipedrive.com/v1/deals?api_token=" + token;
 			$(document).ready(function(){
 				$.getJSON(url, function(result){
+					var past = new Date();
+					var monthDay = past.getDate();
+					past.setDate(monthDay - 40);
+					past.toJSON();
 					var limit = result.data.length;
 					var csvFile = "data:text/csv;charset=utf-8,";
 					for(var i = 0; i < limit; i++){
 						var reg = result.data[i];
-						var csvReg = reg.update_time + ", " + reg.org_name + ", " + reg.next_activity_note;
-						csvFile += i == (limit - 1) ? csvReg : csvReg + "\n";
+						if(reg.update_time > past){
+							var csvReg = reg.update_time + ", " + reg.org_name + ", " + reg.next_activity_note;
+							csvFile += i == (limit - 1) ? csvReg : csvReg + "\n";
+						}
 					}
 					var encodedURI = encodeURI(csvFile);
 					var link = document.createElement("a");
